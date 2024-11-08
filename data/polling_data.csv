@@ -1,0 +1,52 @@
+state_name,harris_support,trump_support,weight,moe
+Arizona,47,51,8,3.0
+Arizona,42,50,7,2.8
+Arizona,42,50,7,4.4
+Arizona,49,50,7,3.7
+Arizona,46,49,8,4.8
+Georgia,48,51,8,3.0
+Georgia,49,49,7,3.9
+Georgia,48,50,8,3.0
+Georgia,46,52,6,2.7
+Michigan,48,49,8,3.0
+Michigan,48,43,7,4.7
+Michigan,47,46,8,3.7
+Michigan,49,49,9,3.0
+Michigan,52,47,7,4.9
+Michigan,47,47,7,4.4
+Michigan,49,50,7,3.0
+Nevada,48,49,8,3.0
+Nevada,47,48,7,2.7
+Nevada,48,48,8,3.0
+Nevada,48,48,8,4.8
+Nevada,43,49,6,2.7
+Nevada,49,48,7,3.0
+North Carolina,49,48,8,3.0
+North Carolina,49,50,9,3.0
+North Carolina,45,47,7,4.2
+North Carolina,48,50,7,3.6
+North Carolina,48,50,7,3.1
+North Carolina,51,49,8,3.0
+North Carolina,47,50,8,3.9
+Pennsylvania,50,48,7,3.4
+Pennsylvania,49,49,7,4.4
+Pennsylvania,48,47,8,3.1
+Pennsylvania,47,50,8,3.0
+Pennsylvania,48,48,7,4.7
+Pennsylvania,49,50,9,3.0
+Pennsylvania,47,49,7,2.1
+Pennsylvania,46,47,7,3.8
+Pennsylvania,48,47,7,3.7
+Pennsylvania,46,46,7,4.4
+Pennsylvania,49,51,8,3.3
+Pennsylvania,49,50,7,3.0
+Wisconsin,49,49,8,3.0
+Wisconsin,51,45,7,4.8
+Wisconsin,50,49,8,3.0
+Wisconsin,47,48,7,4.4
+Wisconsin,49,50,8,3.1
+Wisconsin,48,48,7,2.9
+Wisconsin,49,48,8,3.0
+Wisconsin,50,47,8,4.6
+"Maine CD2",41,50,5,3.0
+"Nebraska CD2",54,42,10,3.0
