@@ -4,7 +4,13 @@
 
 This project simulates the outcome of a hypothetical US presidential election between Kamala Harris and Donald Trump based on state classifications (safe/competitive) and polling data. It runs multiple simulations to estimate the probability of each candidate reaching the 270 electoral votes needed to win.
 
-## Simulation Logic (`election_simulation.py`)
+## Simulation Logic
+
+The codebase is divided into modules:
+
+* `models.py` defines the `State` data model.
+* `data_loader.py` contains helpers for reading state and polling data.
+* `simulation.py` runs Monte Carlo simulations with configurable parameters.
 
 The simulation works as follows:
 
@@ -35,7 +41,8 @@ The simulation works as follows:
 
 ## Files in Project
 
-* `election_simulation.py`: The main Python script that runs the election simulation.
+* `election_simulation.py`: Wrapper script that calls the simulation module.
+* `models.py`, `data_loader.py`, `simulation.py`: Core modules for models, data loading and running simulations.
 * `data/`: Directory containing all necessary data files.
 * `README.md`: This file.
 
@@ -43,10 +50,11 @@ The simulation works as follows:
 
 1.  Ensure you have Python installed.
 2.  Make sure all data files are present in the `data/` subdirectory relative to the script.
-3.  Run the script from your terminal:
+3.  Run the simulation from your terminal:
     ```bash
-    python election_simulation.py
+    python election_simulation.py --simulations 1000 --poll-uncertainty 1.0
     ```
+    You can optionally provide `--turnout-file` pointing to a CSV with columns `state_name` and `margin_shift` to explore turnout scenarios.
 4.  The script will output the simulation results, showing the number of times each candidate won out of the total simulations performed.
 
 ## Dependencies
