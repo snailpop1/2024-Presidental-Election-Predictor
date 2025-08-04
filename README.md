@@ -49,6 +49,24 @@ The simulation works as follows:
     ```
 4.  The script will output the simulation results, showing the number of times each candidate won out of the total simulations performed.
 
+## Running the Notebook
+
+An interactive Jupyter notebook is provided at `notebooks/simulation.ipynb`.
+
+1. Install Jupyter if it is not already available:
+    ```bash
+    pip install notebook
+    ```
+2. Launch the notebook from the repository root:
+    ```bash
+    jupyter notebook notebooks/simulation.ipynb
+    ```
+3. Adjust `poll_weight_factor` and `simulations` in the **Parameters** cell to explore different scenarios.
+4. Run all cells to reproduce the election simulation results. You can also execute the notebook non-interactively:
+    ```bash
+    jupyter nbconvert --to notebook --execute notebooks/simulation.ipynb --output simulation_out.ipynb
+    ```
+
 ## Dependencies
 
 The script uses standard Python libraries:
