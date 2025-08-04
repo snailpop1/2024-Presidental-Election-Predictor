@@ -1,7 +1,8 @@
 import csv
 import random
 import os
-from collections import defaultdict
+
+import pandas as pd
 
 
 class State:
@@ -79,21 +80,45 @@ def read_state_list(filename):
 
 
 def read_polling_data(filename):
+    """Read and preprocess polling data using pandas.
+
+    The CSV is loaded with :mod:`pandas` to take advantage of its
+    built-in cleaning utilities. Rows with missing values in critical
+    columns are dropped and numeric fields are coerced into the proper
+    types.
+
+    Parameters
+    ----------
+    filename: str
+        Path to the polling data CSV file.
+
+    Returns
+    -------
+    list[dict]
+        Cleaned polling records as a list of dictionaries.
     """
-    Reads polling data from a CSV file and returns a list of dictionaries.
-    """
-    polling_data = []
-    with open(filename, 'r', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            polling_data.append({
-                'state_name': row['state_name'],
-                'harris_support': float(row['harris_support']),
-                'trump_support': float(row['trump_support']),
-                'weight': int(row['weight']),
-                'moe': float(row['moe'])
-            })
-    return polling_data
+
+    df = pd.read_csv(filename)
+
+    required_cols = [
+        "state_name",
+        "harris_support",
+        "trump_support",
+        "weight",
+        "moe",
+    ]
+    df = df[required_cols]
+
+    df = df.dropna(subset=required_cols)
+
+    df["harris_support"] = pd.to_numeric(df["harris_support"], errors="coerce")
+    df["trump_support"] = pd.to_numeric(df["trump_support"], errors="coerce")
+    df["weight"] = pd.to_numeric(df["weight"], errors="coerce").astype(int)
+    df["moe"] = pd.to_numeric(df["moe"], errors="coerce")
+
+    df = df.dropna(subset=required_cols)
+
+    return df.to_dict("records")
 
 
 def main():

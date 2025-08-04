@@ -36,14 +36,19 @@ The simulation works as follows:
 ## Files in Project
 
 * `election_simulation.py`: The main Python script that runs the election simulation.
+* `data_ingestion.py`: Fetches polling data from an API or local source, cleans it with pandas and saves it into `data/polling_data.csv`.
 * `data/`: Directory containing all necessary data files.
 * `README.md`: This file.
 
 ## How to Run
 
-1.  Ensure you have Python installed.
-2.  Make sure all data files are present in the `data/` subdirectory relative to the script.
-3.  Run the script from your terminal:
+1.  Ensure you have Python installed and the dependencies listed in `requirements.txt`.
+2.  To refresh polling data from an API (and immediately rerun the simulation) you can run:
+    ```bash
+    RUN_ONCE=1 python data_ingestion.py
+    ```
+    By default the module looks for a `POLLING_API_URL` environment variable. If it's not defined, the existing `data/polling_data.csv` is used.
+3.  Run the simulation on the current data set:
     ```bash
     python election_simulation.py
     ```
@@ -51,10 +56,9 @@ The simulation works as follows:
 
 ## Dependencies
 
-The script uses standard Python libraries:
-* `csv`
-* `random`
-* `os`
-* `collections` (specifically `defaultdict`, though not explicitly used in the final version provided)
+External libraries used by this project are listed in `requirements.txt`:
 
-No external libraries need to be installed.
+* `pandas` – reading and preprocessing polling data
+* `requests` – retrieving polling data from an API
+
+Install them with `pip install -r requirements.txt`.
