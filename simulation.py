@@ -1,7 +1,9 @@
 import csv
-import random
 import os
 from collections import defaultdict
+
+import argparse
+import numpy as np
 
 
 class State:
@@ -146,28 +148,33 @@ def main():
             state = states[state_name]
             state.calculate_weighted_support()
 
-    simulations = 1000
-    harris_wins = 0
-    trump_wins = 0
-    ties = 0
+    parser = argparse.ArgumentParser(description="Simulate election outcomes")
+    parser.add_argument("--simulations", type=int, default=1000,
+                        help="Number of simulation runs")
+    args = parser.parse_args()
 
-    for sim in range(simulations):
-        harris_evs = 0
-        trump_evs = 0
-        for state in states.values():
-            harris_margin = state.harris_support - state.trump_support
-            harris_margin_result = random.gauss(harris_margin, state.std_dev)
-            if harris_margin_result > 0:
-                harris_evs += state.electoral_votes
-            else:
-                trump_evs += state.electoral_votes
+    simulations = args.simulations
 
-        if harris_evs >= 270:
-            harris_wins += 1
-        elif trump_evs >= 270:
-            trump_wins += 1
-        else:
-            ties += 1
+    state_list = list(states.values())
+    margins = np.array(
+        [s.harris_support - s.trump_support for s in state_list],
+        dtype=np.float32,
+    )
+    std_devs = np.array([s.std_dev for s in state_list], dtype=np.float32)
+    evs = np.array([s.electoral_votes for s in state_list], dtype=np.int16)
+    total_ev = np.int32(evs.sum())
+
+    harris_evs = np.zeros(simulations, dtype=np.int16)
+    rng = np.random.default_rng()
+    for margin, sd, ev in zip(margins, std_devs, evs):
+        results = rng.normal(margin, sd, simulations).astype(np.float32)
+        harris_evs += (results > 0).astype(np.int16) * ev
+
+    trump_evs = total_ev - harris_evs
+
+    harris_wins = np.count_nonzero(harris_evs >= 270)
+    trump_wins = np.count_nonzero(trump_evs >= 270)
+    ties = simulations - harris_wins - trump_wins
 
     print(f"\nOut of {simulations} simulations:")
     print(f"Kamala Harris wins: {harris_wins} times")
