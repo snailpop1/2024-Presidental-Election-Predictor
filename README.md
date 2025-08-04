@@ -4,26 +4,23 @@
 
 This project simulates the outcome of a hypothetical US presidential election between Kamala Harris and Donald Trump based on state classifications (safe/competitive) and polling data. It runs multiple simulations to estimate the probability of each candidate reaching the 270 electoral votes needed to win.
 
-## Simulation Logic (`election_simulation.py`)
+## Simulation Pipeline
 
-The simulation works as follows:
+The simulation is broken into three stages represented by separate classes in
+`simulation_pipeline.py`:
 
-1.  **Load State Data:** Reads basic state information, including names and electoral votes, from `data/states_info.csv`.
-2.  **Classify States:**
-    * Reads lists of states considered "safe" for Harris (`data/safe_states_harris.txt`) and Trump (`data/safe_states_trump.txt`). Assigns fixed support margins (e.g., 60/35) and a standard deviation to these states.
-    * Reads a list of "competitive" states from `data/competitive_states.txt`.
-3.  **Process Polling Data:**
-    * Reads polling data for states from `data/polling_data.csv`, which includes Harris support, Trump support, poll weight, and margin of error (MOE).
-    * For competitive states, calculates the weighted average support for each candidate based on the available polls.
-    * Calculates a standard deviation for each competitive state based on the weighted average margin of error from its polls (Std Dev ≈ MOE / 1.96). If no polls are available or the calculated standard deviation is too low, default values are used.
-4.  **Run Simulations:**
-    * Performs a set number of simulations (e.g., 1000).
-    * In each simulation:
-        * For every state, it simulates the election outcome by drawing a random result from a normal (Gaussian) distribution. The distribution is centered around the calculated or assigned support margin (Harris % - Trump %) for that state, using the state's calculated or assigned standard deviation.
-        * If the simulated margin is positive, Harris wins the state's electoral votes; otherwise, Trump wins them.
-        * The total electoral votes for Harris and Trump are tallied for the simulation.
-5.  **Aggregate Results:** Counts the number of simulations where Harris wins (≥ 270 EVs), Trump wins (≥ 270 EVs), or there is a tie/no majority.
-6.  **Output:** Prints the final probabilities based on the simulation outcomes.
+1. **PollDataSource** – loads state and polling information. The default
+   implementation, `CSVFilePollDataSource`, reads the CSV and text files in the
+   `data/` directory.
+2. **SimulationEngine** – performs the Monte Carlo simulations. The repository
+   includes `MonteCarloSimulationEngine`, but new strategies can be added by
+   subclassing `SimulationEngine`.
+3. **ResultAnalyzer** – interprets raw simulation output. `BasicResultAnalyzer`
+   counts wins for each candidate. Custom analysers can compute additional
+   metrics.
+
+`election_simulation.py` wires these pieces together to run the default
+forecast.
 
 ## Data Files (`data/` directory)
 
@@ -35,7 +32,9 @@ The simulation works as follows:
 
 ## Files in Project
 
-* `election_simulation.py`: The main Python script that runs the election simulation.
+* `simulation_pipeline.py`: Core classes for data loading, simulation and
+  result analysis.
+* `election_simulation.py`: Small entry script that runs the default pipeline.
 * `data/`: Directory containing all necessary data files.
 * `README.md`: This file.
 
@@ -58,3 +57,18 @@ The script uses standard Python libraries:
 * `collections` (specifically `defaultdict`, though not explicitly used in the final version provided)
 
 No external libraries need to be installed.
+
+## Extending the Pipeline
+
+The modular design allows new forecasting features. For example, to experiment
+with a different simulation strategy:
+
+```python
+from simulation_pipeline import MonteCarloSimulationEngine, SimulationEngine
+
+class AlwaysHarrisWins(SimulationEngine):
+    def run(self, states, simulations):
+        return [{"Harris": 538, "Trump": 0} for _ in range(simulations)]
+```
+
+More complete examples are provided in `examples/`.
