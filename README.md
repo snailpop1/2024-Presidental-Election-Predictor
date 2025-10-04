@@ -19,7 +19,7 @@ The simulation works as follows:
 4.  **Run Simulations:**
     * Performs a set number of simulations (e.g., 1000).
     * In each simulation:
-        * For every state, it simulates the election outcome by drawing a random result from a normal (Gaussian) distribution. The distribution is centered around the calculated or assigned support margin (Harris % - Trump %) for that state, using the state's calculated or assigned standard deviation.
+        * For every state, it simulates the election outcome by drawing a random result from a normal distribution. The distribution is centered around the calculated or assigned support margin (Harris % - Trump %) for that state, using the state's calculated or assigned standard deviation.
         * If the simulated margin is positive, Harris wins the state's electoral votes; otherwise, Trump wins them.
         * The total electoral votes for Harris and Trump are tallied for the simulation.
 5.  **Aggregate Results:** Counts the number of simulations where Harris wins (≥ 270 EVs), Trump wins (≥ 270 EVs), or there is a tie/no majority.
